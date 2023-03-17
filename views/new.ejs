@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Reservation</title>
+        <link rel="stylesheet" href="../style.css">
+    </head>
+    
+
+    
+    <body class="bg-gray-200">
+
+        <!-- Notifications -->
+        <% if (notif.show) { %>
+        <div class="fixed right-0 h-screen  w-1/5 flex items-center justify-end mr-8">
+            <% if (notif.color) { %>
+            <div class="bg-green-100 p-5 font-VarelaRound border border-green-400">
+            <% } else { %>
+            <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
+            <% } %>
+                <form class="flex" action="/server.js" method="post">
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <button type="submit" formaction="/closeNotif" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
+                </form>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- Instructions Menu -->
+        <div class="fixed left-0 h-screen w-1/5 flex items-center">
+            <% if(instr){ %>
+            <div class="bg-white rounded-lg p-5 font-VarelaRound">
+                <div class="flex justify-between">     
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
+                    <form action="/server.js" method="post"><button type="submit" formaction="/closeNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                </div>
+                <p class="my-4 text-gray-700">Each user can only have a maximum of two reservations per week.</p>
+                <p class="mb-4 text-gray-700">Each user can only delete reservations two times per week.</p>
+                <p class="mb-4 text-gray-700">Users can only reserve timeslots for the coming week.</p>
+                <p class="mb-4 text-gray-700">Each user cannot reserve timeslots that he/she already reserved.</p>
+                <p class=" text-gray-700">Each user cannot reserve timeslots that are at full.</p>
+            </div>
+            <% } else { %>
+            <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
+                <form action="/server,js" method="post"><button type="submit" formaction="/openNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+            </div>    
+            <% } %>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
+            <div>
+                <form action="/server.js" method="post">
+                    <button type="submit" formaction="/dashboardOnClick" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Dashboard</a>
+                    <button type="submit" formaction="/newOnClick" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">New Reservation</a>
+                </form>
+            </div>
+            <div class="fixed max-sm:hidden right-10 flex flex-col justify-center items-center">
+                <p class="font-VarelaRound font-bold"><%= id %></p>
+                <% if (role.userRole == 'administrator') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Administrator</p>
+                <% } else if (role.userRole == 'user') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Student</p>
+                <% } %>
+            </div>
+        </nav>
+
+        <div class="flex flex-col h-screen w-screen justify-center items-center pt-11 ">            
+            <!-- Banner Display -->
+            <div class=" text-gray-500 font-VarelaRound text-4xl font-extrabold mb-5">
+                Please Select Timeslot
+            </div> 
+
+            <!-- Calendar Table-->
+            <table id="table" class="border-collapse rounded-2xl bg-white shadow-lg">
+                <thead class="text-center h-20 items-center">
+                    <tr>
+                        <th class="px-4 py-2 border-b-2 border-gray-600"></th>
+                        <th class="px-4 py-2 border-b-2 w-36 border-gray-600 text-gray-500 text-xs"><p class="text-4xl text-gray-700"><%=day[0]%></p>Monday</th>
+                        <th class="px-4 py-2 border-b-2 w-36 border-gray-600 text-gray-500 text-xs"><p class="text-4xl text-gray-700"><%=day[1]%></p>Tuesday</th>
+                        <th class="px-4 py-2 border-b-2 w-36 border-gray-600 text-gray-500 text-xs"><p class="text-4xl text-gray-700"><%=day[2]%></p>Wednesday</th>
+                        <th class="px-4 py-2 border-b-2 w-36 border-gray-600 text-gray-500 text-xs"><p class="text-4xl text-gray-700"><%=day[3]%></p>Thursday</th>
+                        <th class="px-4 py-2 border-b-2 w-36 border-gray-600 text-gray-500 text-xs"><p class="text-4xl text-gray-700"><%=day[4]%></p>Friday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for ( let i = 0; i < table.length; i++){ %>
+                        <tr>
+                            <td class="px-2 h-8 font-VarelaRound text-gray-700 text-sm flex justify-end items-center"><%= i+8 %>:00 </td>
+                            <% for ( let j = 0; j < table[i].length; j++){ %>
+                                <% if (table[i][j] == true){ %>
+                                    <td class="h-8 border-t-2 border-l-2 border-gray-400 bg-red-100"></td>
+                                <% } else { %>
+                                    <td class="h-8 border-t-2 border-l-2 border-gray-400 bg-transparent">
+                                        <form action="/server.js" method="post">
+                                            <input name="row" type="hidden" value="<%=i%>">
+                                            <input name="col" type="hidden" value="<%=j%>">
+                                            <button type="submit" formaction="/timeslotForNew" onclick="return confirm('Please Confirm Reservation.')" class="hover:shadow-xl hover:text-gray-500 text-gray-300 font-VarelaRound font-bold text-xs w-full h-full pb-1 mt-1 transition-all">Open</button>
+                                        </form>
+                                    </td>
+                                <% }; %>
+                            <% } %>
+                        </tr>
+                    <% } %> 
+                </tbody>
+            </table>
+            <!-- <button class="rounded-lg bg-green-400 text-white text-sm font-bold h-8 w-36 items-center mt-4">Confirm Booking</button> -->
+        </div>
+    </body>
+</html>

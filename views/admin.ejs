@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reservations</title>
+        <link rel="stylesheet" href="../style.css">
+    </head>
+
+    <body class="bg-gray-200">
+        
+        <!-- Notifications -->
+        <% if (notif.show) { %>
+        <div class="fixed right-0 bottom-0  w-1/5 flex items-end justify-end m-5">
+            <% if (notif.color) { %>
+            <div class="bg-green-100 p-5 font-VarelaRound border border-green-400">
+            <% } else { %>
+            <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
+            <% } %>
+                <form class="flex" action="/server.js" method="post">
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <button type="submit" formaction="/closeNotifAdmin" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
+                </form>
+            </div>
+        </div>
+        <% } %>
+
+
+        <!-- Instructions Menu -->
+        <div class="fixed left-0 h-screen w-1/5 flex items-center">
+            <% if(instr){ %>
+            <div class="bg-white rounded-lg p-5 font-VarelaRound">
+                <div class="flex justify-between">     
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
+                    <form action="/server.js" method="post"><button type="submit" formaction="/closeAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                </div>
+                <p class="my-4 text-gray-700">Table displays all reservations.</p>
+                <p class="mb-4 text-gray-700">Search bar can be used to filter reservations.</p>
+                <p class="mb-4 text-gray-700">Reset button resets the table.</p>
+                <p class="mb-4 text-gray-700">To delete reservations, select desired rows from table and click Delete button.</p>
+                <p class="mb-4 text-gray-700">SOC capacity, number of reservations and deletions per user can be modified using the - and +.</p>
+                <p class=" text-gray-700">SOC capacity refers to the maximum number of students per timeslot.</p>
+            </div>
+            <% } else { %>
+            <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
+                <form action="/server,js" method="post"><button type="submit" formaction="/openAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+            </div>    
+            <% } %>
+        </div> 
+
+        <!-- Navigation Bar -->
+        <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
+            <div>
+                <h3 class="font-bold font-VarelaRound text-xl hover:text-main">Welcome to the SOCAT Reservation System</h3>
+            </div>
+            <div class="fixed max-sm:hidden right-10 flex flex-col justify-center items-center">
+                <p class="font-VarelaRound font-bold"><%= id %></p>
+                <% if (role.userRole == 'administrator') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Administrator</p>
+                <% } else if (role.userRole == 'user') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Student</p>
+                <% } %>
+            </div>
+            <div class="fixed max-sm:hidden left-10 flex justify-center items-center">
+                <form action="/server.js" method="post">
+                    <button type="submit" formaction="/logout" class="font-bold font-VarelaRound text-xl hover:text-main">Logout</button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="w-screen h-screen flex justify-center items-center">
+            <!-- Table -->
+            <div id="table" class="overflow-y-scroll max-h-96 mt-16 shadow-md">
+                <table class=" border-collapse bg-white ">
+                    <thead class="text-center items-center" >
+                        <tr>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">Booking ID</th>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">Date</th>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">Time</th>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">Reserver ID</th>
+                            <th class="px-2 border-b-2 w-8 border-gray-600"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservation.forEach((reservation) => { %>
+                        <tr>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= reservation.reservationID %></td>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= reservation.reservationDate %></td>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= reservation.reservationTime %></td>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= reservation.userID %></td>
+                            <td class="border-b border-gray-400"><input name="row" type="checkbox"></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class=" mt-16 ml-32 bg-white rounded-2xl p-5 shadow-lg">
+                <form action="/server.js" method="post">
+                    <script>
+                        // Retrieves data from all checked rows of table    
+                        function getSelected() {
+                            console.log("getSelected() is working")
+                            const grid = document.getElementById("table");
+                            const checkBoxes = grid.getElementsByTagName("input");
+                            let arr = []
+                            for (i = 0; i < checkBoxes.length; i++) {
+                                if (checkBoxes[i].checked) {
+                                let row = checkBoxes[i].parentNode.parentNode;
+                                let data = {
+                                    reservationID: row.cells[0].innerHTML,
+                                    reservationDate: row.cells[1].innerHTML,
+                                    reservationTime: row.cells[2].innerHTML,
+                                    userID: row.cells[3].innerHTML
+                                };
+                                arr.push(data);
+                                }
+                            }
+                            fetch('/adminDelete', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({row: arr})
+                            })
+                            .then(response => {
+                                console.log(response);
+                                location.reload();
+
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                        }
+                    </script>
+                    <div class="w-full flex flex-col">
+                        <input name="search" type="text" placeholder="Search.." class="h-12 bg-gray-200 text-gray-800 p-2 mb-2 w-full placeholder-gray-600 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-500">
+                        <div class="flex justify-between mb-2">
+                            <button type="submit" formaction="/search" class="rounded-lg bg-indigo-600 hover:bg-indigo-700 hover:shadow-md w-40 py-2 text-gray-100 font-bold mr-1">Search</button>
+                            <button type="submit" formaction="/adminReset" class="bg-green-500 rounded-lg hover:bg-green-600 hover:shadow-md text-gray-100 font-bold ml-1 w-40 py-2">Reset</button>
+                        </div>
+                        <button type="button" onclick="getSelected()" class="bg-red-500 rounded-lg hover:bg-red-600 hover:shadow-md text-gray-100 font-bold w-full py-2 mb-2">Delete</button>
+                        <div class="mb-2 flex justify-between items-center">
+                            <label class="mr-5">SOC Capacity</label>
+                            <div>
+                                <button type="submit" formaction="/maxUserMinus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">-</button>
+                                <label class="mx-2"><%=maxUser%></label>
+                                <button type="submit" formaction="/maxUserPlus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">+</button>
+                            </div>
+                        </div>
+                        <div class="mb-2 flex justify-between items-center">
+                            <label class="mr-5">Reservations Per User</label>
+                            <div>
+                                <button type="submit" formaction="/maxResMinus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">-</button>
+                                <label class="mx-2"><%=maxRes%></label>
+                                <button type="submit" formaction="/maxResPlus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">+</button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="mr-5">Deletes Per User</label>
+                            <div>
+                                <button type="submit" formaction="/maxDelMinus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">-</button>
+                                <label class="mx-2"><%=maxDel%></label>
+                                <button type="submit" formaction="/maxDelPlus" class="rounded-lg bg-gray-100 hover:bg-gray-200 hover:shadow-md p-2 border border-gray-400 text-gray-600 font-bold font-mono">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>            
+
+
+
+        </div>
+    </body>
+</html> 
