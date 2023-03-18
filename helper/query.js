@@ -183,10 +183,10 @@ const addUser = async (userID, name, password) => {
             VALUES ('${userID}', '${name}', '${password}');`;
 
         await connection.execute(SQL);
-        return true
+        return true;
 
     } catch(error) {
-        console.error(error)
+        return false;
     }
 }
 

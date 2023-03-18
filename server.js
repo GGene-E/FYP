@@ -112,14 +112,17 @@ app.post('/sign-up', async (req,res) => {
     const pass = req.body.password;
     const hashedPass = await bcrypt.hash(pass, 10);
 
-    const success = getData.addUser(tp, name, hashedPass)
+    const success = await getData.addUser(tp, name, hashedPass)
     if(success){
         req.session.notifShow = true; // Notification settings
-        req.session.notifMessage = "Successfully Created New User";
+        req.session.notifMessage = "Successfully Created New User.";
         req.session.notifColor = true;
         console.log("Successfully added new user.")
     } else {
-        console.log("Failed to add new user.")
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "User already exists.";
+        req.session.notifColor = false;
+        console.log("Failed to add new user. User already exists")
     }
 
     res.redirect('/login');
