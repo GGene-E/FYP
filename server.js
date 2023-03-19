@@ -3,7 +3,8 @@ const path = require('path');
 const dateUtils = require('./helper/dates.js');
 const getData = require('./helper/query.js');
 const tableObj = require('./helper/table.js');
-const limiter = require('./helper/limits.js')
+const limiter = require('./helper/limits.js');
+const custUtils = require('./helper/customUtils.js');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const store = new session.MemoryStore();
@@ -72,6 +73,16 @@ app.get('/sign-up', async (req,res) => {
 // When login button pressed
 app.post('/login', async (req,res) => {
     
+    // Checks if TP contains special characters, redirects if true
+    console.log(custUtils.containsSpecialChars(req.body.tp));
+    if (custUtils.containsSpecialChars(req.body.tp)){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "TP Number cannot contain special characters.";
+        req.session.notifColor = false;
+        console.log("TP Number cannot contain special characters.")
+        return res.redirect('/login')
+    }
+
     // Queries database for user, redirects if not found
     const user = await getData.getUser(req.body.tp);
     if (user == undefined){
@@ -81,6 +92,7 @@ app.post('/login', async (req,res) => {
         console.log("User not found")
         return res.redirect('/login')
     }
+
     // Compare inputted password and queried password (from db)
     if(await bcrypt.compare(req.body.password, user.userPass)){
         req.session.userID = user.userID.toUpperCase();
@@ -111,6 +123,15 @@ app.post('/sign-up', async (req,res) => {
     const name = req.body.name;
     const pass = req.body.password;
     const hashedPass = await bcrypt.hash(pass, 10);
+
+    // Checks if TP contains special characters, redirects if true
+    if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "TP Number and Name cannot contain special characters.";
+        req.session.notifColor = false;
+        console.log("TP Number cannot and Name contain special characters.")
+        return res.redirect('/login')
+    }
 
     const success = await getData.addUser(tp, name, hashedPass)
     if(success){
