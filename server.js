@@ -224,12 +224,19 @@ app.post('/maxResPlus', (req,res) => {
 
 // Decrease Maximum Reservations Per User
 app.post('/maxResMinus', (req,res) => {
-    limiter.maxRes--;
-
-    // Notify user
-    req.session.notifShow = true;
-    req.session.notifMessage = "Max Reservations Per User -1";
-    req.session.notifColor = true;
+    
+    if (limiter.maxRes > 0){
+        limiter.maxRes--;
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Max Reservations Per User -1";
+        req.session.notifColor = true;
+    } else {
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Number cannot be negative.";
+        req.session.notifColor = false;
+    }
 
     res.redirect('/admin');
 })
@@ -248,12 +255,19 @@ app.post('/maxDelPlus', (req,res) => {
 
 // Decrease Maximum Deletions Per User Per Week
 app.post('/maxDelMinus', (req,res) => {
-    limiter.maxDel--;
+    if(limiter.maxDel > 0){
+        limiter.maxDel--;
 
-    // Notify user
-    req.session.notifShow = true;
-    req.session.notifMessage = "Max Deletes Per User -1";
-    req.session.notifColor = true;
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Max Deletes Per User -1";
+        req.session.notifColor = true;
+    } else {
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Number cannot be negative.";
+        req.session.notifColor = false;
+    }
 
     res.redirect('/admin');
 })
@@ -272,12 +286,20 @@ app.post('/maxUserPlus', (req,res) => {
 
 // Decrease Maximum User Per Timeslot
 app.post('/maxUserMinus', (req,res) => {
-    limiter.maxUser--;
+    
+    if (limiter.maxUser > 0) {
+        limiter.maxUser--;
 
-    // Notify user
-    req.session.notifShow = true;
-    req.session.notifMessage = "Max User Per Timeslot -1";
-    req.session.notifColor = true;
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Max User Per Timeslot -1";
+        req.session.notifColor = true;
+    } else {
+        // Notify user
+        req.session.notifShow = true;
+        req.session.notifMessage = "Number cannot be negative.";
+        req.session.notifColor = false;
+    }
 
     res.redirect('/admin');
 })
