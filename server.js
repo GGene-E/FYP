@@ -49,11 +49,6 @@ app.get('/', (req,res) => {
 //API ROUTES FOR LOGIN/SIGNUP
 //Display login page
 app.get('/login', async (req,res) => {    
-    
-    // // Decide whether to show notification
-    // req.session.notifShow = false;
-    // req.session.notifMessage = "";
-    // req.session.notifColor = true;
        
     res.render('login', {
         show: req.session.notifShow,
@@ -63,10 +58,11 @@ app.get('/login', async (req,res) => {
 })
 
 app.get('/sign-up', async (req,res) => {
-    //const notif = req.session.notif;
     
     res.render('signup',{
-        //notif: notif
+        show: req.session.notifShow,
+        message: req.session.notifMessage,
+        color: req.session.notifColor    
     });
 })
 
@@ -123,13 +119,22 @@ app.post('/sign-up', async (req,res) => {
     const pass = req.body.password;
     const hashedPass = await bcrypt.hash(pass, 10);
 
+    // Checks if any input fields are empty, redirects if true
+    if (tp == "" || name == "" || pass == ""){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "Please fill in all fields.";
+        req.session.notifColor = false;
+        console.log("Please fill in all fields.")
+        return res.redirect('/sign-up')
+    }
+
     // Checks if TP contains special characters, redirects if true
     if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
         req.session.notifShow = true; // Notification settings
         req.session.notifMessage = "TP Number and Name cannot contain special characters.";
         req.session.notifColor = false;
         console.log("TP Number cannot and Name contain special characters.")
-        return res.redirect('/login')
+        return res.redirect('/sign-up')
     }
 
     const success = await getData.addUser(tp, name, hashedPass)

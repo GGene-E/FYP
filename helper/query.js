@@ -93,7 +93,6 @@ const queryRole = async (userID) => {
 
     } catch (error) {
         console.error(error);
-        console.log('TESTEST')
         return false
     }
 }
