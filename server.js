@@ -74,7 +74,6 @@ app.get('/sign-up', async (req,res) => {
 app.post('/login', async (req,res) => {
     
     // Checks if TP contains special characters, redirects if true
-    console.log(custUtils.containsSpecialChars(req.body.tp));
     if (custUtils.containsSpecialChars(req.body.tp)){
         req.session.notifShow = true; // Notification settings
         req.session.notifMessage = "TP Number cannot contain special characters.";
