@@ -69,6 +69,15 @@ app.get('/sign-up', async (req,res) => {
 // When login button pressed
 app.post('/login', async (req,res) => {
     
+    // Checks if any input fields are empty, redirects if true
+    if (req.body.tp == "" || req.body.password == ""){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "Please fill in all fields.";
+        req.session.notifColor = false;
+        console.log("Please fill in all fields.")
+        return res.redirect('/login')
+    }
+    
     // Checks if TP contains special characters, redirects if true
     if (custUtils.containsSpecialChars(req.body.tp)){
         req.session.notifShow = true; // Notification settings
