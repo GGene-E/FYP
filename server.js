@@ -127,6 +127,7 @@ app.post('/sign-up', async (req,res) => {
     const name = req.body.name;
     const pass = req.body.password;
     const hashedPass = await bcrypt.hash(pass, 10);
+    const role = "user";
 
     // Checks if any input fields are empty, redirects if true
     if (tp == "" || name == "" || pass == ""){
@@ -146,7 +147,7 @@ app.post('/sign-up', async (req,res) => {
         return res.redirect('/sign-up')
     }
 
-    const success = await getData.addUser(tp, name, hashedPass)
+    const success = await getData.addUser(tp, name, hashedPass, role)
     if(success){
         req.session.notifShow = true; // Notification settings
         req.session.notifMessage = "Successfully Created New User.";
@@ -160,6 +161,56 @@ app.post('/sign-up', async (req,res) => {
     }
 
     res.redirect('/login');
+})
+
+// When "Register Admin" button is clicked from admin creation page
+app.post('/sign-up-admin', async (req,res) => {
+    
+    // Check if session expired, if so, redirect to login
+    if (req.session.userID == undefined){
+        console.log("Session has expired, please login again.");
+        return res.redirect('login');
+    }
+    
+    const tp = req.body.tp.toUpperCase();
+    const name = req.body.name;
+    const pass = req.body.password;
+    const role = "administrator";
+    const hashedPass = await bcrypt.hash(pass, 10);
+
+    // Checks if any input fields are empty, redirects if true
+    if (tp == "" || name == "" || pass == ""){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "Please fill in all fields.";
+        req.session.notifColor = false;
+        console.log("Please fill in all fields.")
+        return res.redirect('/sign-up-admin')
+    }
+
+    // Checks if TP contains special characters, redirects if true
+    if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "TP Number and Name cannot contain special characters.";
+        req.session.notifColor = false;
+        console.log("TP Number cannot and Name contain special characters.")
+        return res.redirect('/sign-up-admin')
+    }
+
+    const success = await getData.addUser(tp, name, hashedPass, role)
+    if(success){
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "Successfully Created New Administrator.";
+        req.session.notifColor = true;
+        console.log("Successfully added new administrator.")
+    } else {
+        req.session.notifShow = true; // Notification settings
+        req.session.notifMessage = "User already exists.";
+        req.session.notifColor = false;
+        console.log("Failed to add new user. User already exists")
+    }
+
+    res.redirect('/sign-up-admin');
+
 })
 
 app.post('/logout', (req,res) => {
@@ -221,6 +272,36 @@ app.post('/adminReset', async (req,res) => {
     tableObj.adminTable = await tableObj.createAdminTable();
     res.redirect('/admin')
 })
+
+// When New Admin button is pressed, create new admin
+app.get('/sign-up-admin', async (req,res) => {
+
+    // Check if session expired, if so, redirect to login
+    if (req.session.userID == undefined){
+        console.log("Session has expired, please login again.");
+        return res.redirect('login');
+    }
+
+    // Get user info
+    const id = req.session.userID;
+    const role = req.session.role;
+
+    // Decide whether to show notification
+    const notif = {
+        show: req.session.notifShow,
+        message: req.session.notifMessage,
+        color: req.session.notifColor
+    };
+
+
+    res.render('signup-admin', {
+        id: id,
+        role: role,
+        notif: notif
+    });
+})
+
+
 
 // When Delete button is pressed, delete the checked rows
 app.post('/adminDelete', async (req,res) => {
@@ -582,6 +663,12 @@ app.post('/closeNotifLogin', (req,res) => {
 app.post('/closeNotifSign', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/sign-up');
+})
+
+// To close sign-up notification
+app.post('/closeNotifSignAdmin', (req,res) => {
+    req.session.notifShow = false;
+    res.redirect('/sign-up-admin');
 })
 
 

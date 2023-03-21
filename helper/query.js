@@ -173,13 +173,13 @@ const getLogDel = async (userID, weekStart, weekEnd) => {
 }
 
 // Adds user into database
-const addUser = async (userID, name, password) => {
+const addUser = async (userID, name, password, role) => {
     try {
         const connection = await mysql.createConnection(dbCred);
 
         const SQL = `
-            INSERT INTO Users (userID, userName, userPass)
-            VALUES ('${userID}', '${name}', '${password}');`;
+            INSERT INTO Users (userID, userName, userPass, userRole)
+            VALUES ('${userID}', '${name}', '${password}', '${role}');`;
 
         await connection.execute(SQL);
         return true;
