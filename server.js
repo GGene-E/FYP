@@ -305,8 +305,18 @@ app.get('/sign-up-admin', async (req,res) => {
 
 // When Delete button is pressed, delete the checked rows
 app.post('/adminDelete', async (req,res) => {
-    // Row is an array of reservaiton objects
+    // Row is an array of reservation objects
     const row = req.body.row;
+
+    // If no reservations are selected, return error message
+    if (row.length == 0) {
+        req.session.notifShow = true;
+        req.session.notifMessage = "Please Select Reservations from Table";
+        req.session.notifColor = false;
+        console.log("Please Select Reservations from Table.");
+        return res.redirect('/admin');
+    }
+
     // For each object in row, delete
     for (i = 0; i < row.length; i++){
         const time = row[i].reservationTime.concat(":00");
