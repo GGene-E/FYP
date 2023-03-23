@@ -567,9 +567,9 @@ app.post('/timeslotForDel', async (req,res) => {
     } else {
         // Notify user
         req.session.notifShow = true;
-        req.session.notifMessage = "Sorry, you have deleted more than twice this week.";
+        req.session.notifMessage = "Sorry, you have reached maximum number of deletions this week.";
         req.session.notifColor = false; //Set red notif background
-        console.log("Sorry, you have deleted more than twice this week.");
+        console.log("Sorry, you have reached maximum number of deletions this week.");
     }
 
     res.redirect('/dashboard');
