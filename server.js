@@ -163,7 +163,7 @@ app.post('/sign-up', async (req,res) => {
     res.redirect('/login');
 })
 
-// When "Register Admin" button is clicked from admin creation page
+// When "Register Admin" button is clicked from Admin-registration page
 app.post('/sign-up-admin', async (req,res) => {
     
     // Check if session expired, if so, redirect to login
@@ -267,13 +267,13 @@ app.post('/search', async (req,res) => {
 })
 
 // When Reset button is pressed, reset table
-app.post('/adminReset', async (req,res) => {
+app.get('/adminReset', async (req,res) => {
 
     tableObj.adminTable = await tableObj.createAdminTable();
     res.redirect('/admin')
 })
 
-// When New Admin button is pressed, create new admin
+// When New Admin button is pressed from admin page, render Admin-registration Page
 app.get('/sign-up-admin', async (req,res) => {
 
     // Check if session expired, if so, redirect to login
@@ -304,7 +304,7 @@ app.get('/sign-up-admin', async (req,res) => {
 
 
 // When Delete button is pressed, delete the checked rows
-app.post('/adminDelete', async (req,res) => {
+app.delete('/adminDelete', async (req,res) => {
     // Row is an array of reservation objects
     const row = req.body.row;
 
@@ -586,59 +586,59 @@ app.post('/timeslotForDel', async (req,res) => {
 })
 
 // When the previous week is requested
-app.post('/prevWeek', (req,res) => {
+app.get('/prevWeek', (req,res) => {
     dateUtils.week = dateUtils.getPrevWeek(dateUtils.week);
     res.redirect('/dashboard');
 })
 
 // When the next week is requested
-app.post('/nextWeek', (req,res) => {
+app.get('/nextWeek', (req,res) => {
     dateUtils.week = dateUtils.getNextWeek(dateUtils.week);
     res.redirect('/dashboard');
 })
 
-// When the previous week is requested
-app.post('/dashboardOnClick', (req,res) => {
+// When "Dashboard" button clicked from navbar
+app.get('/dashboardOnClick', (req,res) => {
     res.redirect('/dashboard');
 })
 
-// When the next week is requested
-app.post('/newOnClick', (req,res) => {
+// When "New Reservation" button clicked from navbar
+app.get('/newOnClick', (req,res) => {
     res.redirect('/new');
 })
 
 // To close instructions
-app.post('/closeInstruction', (req,res) => {
+app.get('/closeInstruction', (req,res) => {
     req.session.instruction = false;
     res.redirect('/dashboard');
 })
 
 // To open instructions
-app.post('/openInstruction', (req,res) => {
+app.get('/openInstruction', (req,res) => {
     req.session.instruction = true;
     res.redirect('/dashboard');
 })
 
 // To close New Reservation instructions
-app.post('/closeNewInstruction', (req,res) => {
+app.get('/closeNewInstruction', (req,res) => {
     req.session.instruction = false;
     res.redirect('/new');
 })
 
 // To open New Reservation instructions
-app.post('/openNewInstruction', (req,res) => {
+app.get('/openNewInstruction', (req,res) => {
     req.session.instruction = true;
     res.redirect('/new');
 })
 
 // To close admin instructions
-app.post('/closeAdminInstruction', (req,res) => {
+app.get('/closeAdminInstruction', (req,res) => {
     req.session.instruction = false;
     res.redirect('/admin');
 })
 
 // To open admin instructions
-app.post('/openAdminInstruction', (req,res) => {
+app.get('/openAdminInstruction', (req,res) => {
     req.session.instruction = true;
     res.redirect('/admin');
 })
@@ -646,37 +646,37 @@ app.post('/openAdminInstruction', (req,res) => {
 
 // NOTIFICATION BUTTONS
 // To close dashboard notification
-app.post('/closeNotifUser', (req,res) => {
+app.get('/closeNotifUser', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/dashboard');
 })
 
 // To close new-reservations notification
-app.post('/closeNotif', (req,res) => {
+app.get('/closeNotif', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/new');
 })
 
 // To close admin notification for admin
-app.post('/closeNotifAdmin', (req,res) => {
+app.get('/closeNotifAdmin', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/admin');
 })
 
 // To close login notification
-app.post('/closeNotifLogin', (req,res) => {
+app.get('/closeNotifLogin', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/login');
 })
 
 // To close sign-up notification
-app.post('/closeNotifSign', (req,res) => {
+app.get('/closeNotifSign', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/sign-up');
 })
 
 // To close sign-up notification
-app.post('/closeNotifSignAdmin', (req,res) => {
+app.get('/closeNotifSignAdmin', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/sign-up-admin');
 })

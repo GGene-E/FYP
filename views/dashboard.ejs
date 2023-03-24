@@ -20,7 +20,7 @@
             <% } else { %>
             <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
             <% } %>
-                <form class="flex" action="/server.js" method="post">
+                <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
                     <button type="submit" formaction="/closeNotifUser" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
@@ -36,7 +36,7 @@
             <div class="bg-white rounded-lg p-5 font-VarelaRound">
                 <div class="flex justify-between">     
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
-                    <form action="/server.js" method="post"><button type="submit" formaction="/closeInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                    <form action="/server.js" method="get"><button type="submit" formaction="/closeInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
                 </div>
                 <p class="my-4 text-gray-700">Each user can only have a maximum of two reservations per week.</p>
                 <p class="mb-4 text-gray-700">Each user can only delete reservations two times per week.</p>
@@ -46,7 +46,7 @@
             </div>
             <% } else { %>
             <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
-                <form action="/server,js" method="post"><button type="submit" formaction="/openInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+                <form action="/server,js" method="get"><button type="submit" formaction="/openInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
             </div>    
             <% } %>
         </div>  
@@ -54,7 +54,7 @@
         <!-- Navigation Bar -->
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
-                <form action="/server.js" method="post">
+                <form action="/server.js" method="get">
                     <button type="submit" formaction="/dashboardOnClick" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Dashboard</a>
                     <button type="submit" formaction="/newOnClick" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">New Reservation</a>
                 </form>
@@ -76,7 +76,7 @@
 
         <!-- Week Display -->
         <div class="flex flex-col h-screen w-screen justify-center items-center pt-10">
-            <form class="flex items-center mb-4" action="/server.js" method="post">
+            <form class="flex items-center mb-4" action="/server.js" method="get">
                 <button type="submit" formaction="/prevWeek" class="rounded-lg bg-transparent text-gray-500 hover:text-main text-4xl font-bold font-mono h-8 w-20 items-center mb-4"><</button>
                 
                 <div class=" text-gray-500 font-VarelaRound text-4xl font-extrabold ">

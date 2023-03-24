@@ -20,7 +20,7 @@
             <% } else { %>
             <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
             <% } %>
-                <form class="flex" action="/server.js" method="post">
+                <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
                     <button type="submit" formaction="/closeNotif" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
@@ -34,7 +34,7 @@
             <div class="bg-white rounded-lg p-5 font-VarelaRound">
                 <div class="flex justify-between">     
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
-                    <form action="/server.js" method="post"><button type="submit" formaction="/closeNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                    <form action="/server.js" method="get"><button type="submit" formaction="/closeNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
                 </div>
                 <p class="my-4 text-gray-700">Each user can only have a maximum of two reservations per week.</p>
                 <p class="mb-4 text-gray-700">Each user can only delete reservations two times per week.</p>
@@ -44,7 +44,7 @@
             </div>
             <% } else { %>
             <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
-                <form action="/server,js" method="post"><button type="submit" formaction="/openNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+                <form action="/server,js" method="get"><button type="submit" formaction="/openNewInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
             </div>    
             <% } %>
         </div>
@@ -52,7 +52,7 @@
         <!-- Navigation Bar -->
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
-                <form action="/server.js" method="post">
+                <form action="/server.js" method="get">
                     <button type="submit" formaction="/dashboardOnClick" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Dashboard</a>
                     <button type="submit" formaction="/newOnClick" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">New Reservation</a>
                 </form>

@@ -18,7 +18,7 @@
             <% } else { %>
             <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
             <% } %>
-                <form class="flex" action="/server.js" method="post">
+                <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
                     <button type="submit" formaction="/closeNotifAdmin" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
@@ -33,7 +33,7 @@
             <div class="bg-white rounded-lg p-5 font-VarelaRound">
                 <div class="flex justify-between">     
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
-                    <form action="/server.js" method="post"><button type="submit" formaction="/closeAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                    <form action="/server.js" method="get"><button type="submit" formaction="/closeAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
                 </div>
                 <p class="my-4 text-gray-700">Table displays all reservations.</p>
                 <p class="mb-4 text-gray-700">Search bar can be used to filter reservations.</p>
@@ -44,7 +44,7 @@
             </div>
             <% } else { %>
             <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
-                <form action="/server,js" method="post"><button type="submit" formaction="/openAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+                <form action="/server,js" method="get"><button type="submit" formaction="/openAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
             </div>    
             <% } %>
         </div> 
@@ -119,7 +119,7 @@
                                 }
                             }
                             fetch('/adminDelete', {
-                                method: 'POST',
+                                method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
@@ -139,7 +139,7 @@
                         <input name="search" type="text" placeholder="Search.." class="h-12 bg-gray-200 text-gray-800 p-2 mb-2 w-full placeholder-gray-600 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-500">
                         <div class="flex justify-between mb-2">
                             <button type="submit" formaction="/search" class="rounded-lg bg-indigo-600 hover:bg-indigo-700 hover:shadow-md w-40 py-2 text-gray-100 font-bold mr-1">Search</button>
-                            <button type="submit" formaction="/adminReset" class="bg-blue-500 rounded-lg hover:bg-blue-600 hover:shadow-md text-gray-100 font-bold ml-1 w-40 py-2">Reset</button>
+                            <button type="submit" formmethod="get" formaction="/adminReset" class="bg-blue-500 rounded-lg hover:bg-blue-600 hover:shadow-md text-gray-100 font-bold ml-1 w-40 py-2">Reset</button>
                         </div>
                         <div class="flex justify-between mb-2">
                             <button type="button" onclick="getSelected()" class="bg-red-500 rounded-lg hover:bg-red-600 hover:shadow-md text-gray-100 font-bold w-40 py-2 mr-1">Delete</button>
