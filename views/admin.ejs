@@ -28,12 +28,11 @@
 
 
         <!-- Instructions Menu -->
-        <div class="fixed left-0 h-screen w-1/5 flex items-center">
-            <% if(instr){ %>
-            <div class="bg-white rounded-lg p-5 font-VarelaRound">
+        <div class="fixed left-0 h-screen max-w-sm flex items-center">
+            <div id="instruction" class="bg-white rounded-lg p-5 font-VarelaRound hidden shadow-lg overflow-auto">
                 <div class="flex justify-between">     
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
-                    <form action="/server.js" method="get"><button type="submit" formaction="/closeAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button></form>
+                    <button id="closeInstrButton" type="button" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button>
                 </div>
                 <p class="my-4 text-gray-700">Table displays all reservations.</p>
                 <p class="mb-4 text-gray-700">Search bar can be used to filter reservations.</p>
@@ -42,19 +41,18 @@
                 <p class="mb-4 text-gray-700">SOC capacity, number of reservations and deletions per user can be modified using the - and +.</p>
                 <p class=" text-gray-700">SOC capacity refers to the maximum number of students per timeslot.</p>
             </div>
-            <% } else { %>
-            <div class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
-                <form action="/server,js" method="get"><button type="submit" formaction="/openAdminInstruction" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button></form>
+            <div id="showInstrButtonContainer" class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
+                <button  id="showInstrButton" type="button" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button>
             </div>    
-            <% } %>
-        </div> 
+            <script src="./utilities/instructions.js"></script>
+        </div>   
 
         <!-- Navigation Bar -->
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
                 <h3 class="font-bold font-VarelaRound text-xl hover:text-main">Welcome to the SOCAT Reservation System</h3>
             </div>
-            <div class="fixed max-sm:hidden right-10 flex flex-col justify-center items-center">
+            <div class="absolute max-sm:hidden right-10 flex flex-col justify-center items-center">
                 <p class="font-VarelaRound font-bold"><%= id %></p>
                 <% if (role.userRole == 'administrator') { %>
                     <p class="font-VarelaRound font-bold text-gray-500 text-xs">Administrator</p>
@@ -62,7 +60,7 @@
                     <p class="font-VarelaRound font-bold text-gray-500 text-xs">Student</p>
                 <% } %>
             </div>
-            <div class="fixed max-sm:hidden left-10 flex justify-center items-center">
+            <div class="absolute max-sm:hidden left-10 flex justify-center items-center">
                 <form action="/server.js" method="post">
                     <button type="submit" formaction="/logout" class="font-bold font-VarelaRound text-xl hover:text-main">Logout</button>
                 </form>

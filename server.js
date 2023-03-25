@@ -102,7 +102,6 @@ app.post('/login', async (req,res) => {
         req.session.userID = user.userID.toUpperCase();
         req.session.role = await getData.queryRole(user.userID);
         req.session.notifShow = false; // Remove Old Notifications
-        req.session.instruction = false; // Instruction settings
         req.session.save();
         console.log('Successfully Logged In');
 
@@ -235,9 +234,6 @@ app.get('/admin', async (req,res) => {
     const role = req.session.role;
 
     let table = await tableObj.adminTable;
-
-    // Decide whether to show instructions
-    const instr = req.session.instruction;
     
     // Decide whether to show notification
     const notif = {
@@ -253,7 +249,6 @@ app.get('/admin', async (req,res) => {
         maxRes: limiter.maxRes,
         maxDel: limiter.maxDel,
         maxUser: limiter.maxUser,
-        instr: instr,
         notif: notif
     })
 })
@@ -451,9 +446,6 @@ app.get('/dashboard', async (req,res) => {
     let table = tableObj.resetTable();
     table = await tableObj.setUserRes(table, dateUtils.week, id);
 
-    // Decide whether to show instructions
-    const instr = req.session.instruction;
-
     // Decide whether to show notification
     const notif = {
         show: req.session.notifShow,
@@ -467,7 +459,6 @@ app.get('/dashboard', async (req,res) => {
         role: role,
         id: id,
         table: table,
-        instr: instr,
         notif: notif,
     });
 })
@@ -497,9 +488,6 @@ app.get('/new', async (req,res) => {
     table = await tableObj.setUserRes(table, dateUtils.week, id);
     table = await tableObj.setFullSlot(table, dateUtils.week, limiter.maxUser);
 
-    // Decide whether to show instructions
-    const instr = req.session.instruction;
-
     // Decide whether to show notification
     const notif = {
         show: req.session.notifShow,
@@ -513,7 +501,6 @@ app.get('/new', async (req,res) => {
         role: role,
         id: id,
         table: table,
-        instr: instr,
         notif: notif
     });
 })
@@ -606,43 +593,6 @@ app.get('/dashboardOnClick', (req,res) => {
 app.get('/newOnClick', (req,res) => {
     res.redirect('/new');
 })
-
-// To close instructions
-app.get('/closeInstruction', (req,res) => {
-    req.session.instruction = false;
-    res.redirect('/dashboard');
-})
-
-// To open instructions
-app.get('/openInstruction', (req,res) => {
-    req.session.instruction = true;
-    res.redirect('/dashboard');
-})
-
-// To close New Reservation instructions
-app.get('/closeNewInstruction', (req,res) => {
-    req.session.instruction = false;
-    res.redirect('/new');
-})
-
-// To open New Reservation instructions
-app.get('/openNewInstruction', (req,res) => {
-    req.session.instruction = true;
-    res.redirect('/new');
-})
-
-// To close admin instructions
-app.get('/closeAdminInstruction', (req,res) => {
-    req.session.instruction = false;
-    res.redirect('/admin');
-})
-
-// To open admin instructions
-app.get('/openAdminInstruction', (req,res) => {
-    req.session.instruction = true;
-    res.redirect('/admin');
-})
-
 
 // NOTIFICATION BUTTONS
 // To close dashboard notification
