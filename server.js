@@ -212,7 +212,7 @@ app.post('/sign-up-admin', async (req,res) => {
 
 })
 
-app.post('/logout', (req,res) => {
+app.get('/logout', (req,res) => {
     req.session.destroy((err) => {
         res.redirect('/login')
     })
