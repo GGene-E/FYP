@@ -128,23 +128,23 @@ app.post('/sign-up', async (req,res) => {
     const hashedPass = await bcrypt.hash(pass, 10);
     const role = "user";
 
-    // Checks if any input fields are empty, redirects if true
-    if (tp == "" || name == "" || pass == ""){
-        req.session.notifShow = true; // Notification settings
-        req.session.notifMessage = "Please fill in all fields.";
-        req.session.notifColor = false;
-        console.log("Please fill in all fields.")
-        return res.redirect('/sign-up')
-    }
+    // // Checks if any input fields are empty, redirects if true
+    // if (tp == "" || name == "" || pass == ""){
+    //     req.session.notifShow = true; // Notification settings
+    //     req.session.notifMessage = "Please fill in all fields.";
+    //     req.session.notifColor = false;
+    //     console.log("Please fill in all fields.")
+    //     return res.redirect('/sign-up')
+    // }
 
-    // Checks if TP contains special characters, redirects if true
-    if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
-        req.session.notifShow = true; // Notification settings
-        req.session.notifMessage = "TP Number and Name cannot contain special characters.";
-        req.session.notifColor = false;
-        console.log("TP Number cannot and Name contain special characters.")
-        return res.redirect('/sign-up')
-    }
+    // // Checks if TP contains special characters, redirects if true
+    // if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
+    //     req.session.notifShow = true; // Notification settings
+    //     req.session.notifMessage = "TP Number and Name cannot contain special characters.";
+    //     req.session.notifColor = false;
+    //     console.log("TP Number cannot and Name contain special characters.")
+    //     return res.redirect('/sign-up')
+    // }
 
     const success = await getData.addUser(tp, name, hashedPass, role)
     if(success){
@@ -177,23 +177,23 @@ app.post('/sign-up-admin', async (req,res) => {
     const role = "administrator";
     const hashedPass = await bcrypt.hash(pass, 10);
 
-    // Checks if any input fields are empty, redirects if true
-    if (tp == "" || name == "" || pass == ""){
-        req.session.notifShow = true; // Notification settings
-        req.session.notifMessage = "Please fill in all fields.";
-        req.session.notifColor = false;
-        console.log("Please fill in all fields.")
-        return res.redirect('/sign-up-admin')
-    }
+    // // Checks if any input fields are empty, redirects if true
+    // if (tp == "" || name == "" || pass == ""){
+    //     req.session.notifShow = true; // Notification settings
+    //     req.session.notifMessage = "Please fill in all fields.";
+    //     req.session.notifColor = false;
+    //     console.log("Please fill in all fields.")
+    //     return res.redirect('/sign-up-admin')
+    // }
 
-    // Checks if TP contains special characters, redirects if true
-    if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
-        req.session.notifShow = true; // Notification settings
-        req.session.notifMessage = "TP Number and Name cannot contain special characters.";
-        req.session.notifColor = false;
-        console.log("TP Number cannot and Name contain special characters.")
-        return res.redirect('/sign-up-admin')
-    }
+    // // Checks if TP contains special characters, redirects if true
+    // if (custUtils.containsSpecialChars(tp) || custUtils.containsSpecialChars(name)){
+    //     req.session.notifShow = true; // Notification settings
+    //     req.session.notifMessage = "TP Number and Name cannot contain special characters.";
+    //     req.session.notifColor = false;
+    //     console.log("TP Number cannot and Name contain special characters.")
+    //     return res.redirect('/sign-up-admin')
+    // }
 
     const success = await getData.addUser(tp, name, hashedPass, role)
     if(success){

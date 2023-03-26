@@ -1068,6 +1068,16 @@ video {
   color: rgb(227 229 232 / var(--tw-text-opacity));
 }
 
+.text-red-700{
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
+.text-red-600{
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
 .placeholder-gray-600::-moz-placeholder{
   --tw-placeholder-opacity: 1;
   color: rgb(79 84 92 / var(--tw-placeholder-opacity));
@@ -1215,6 +1225,11 @@ video {
 .focus\:ring-indigo-100:focus{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(224 231 255 / var(--tw-ring-opacity));
+}
+
+.disabled\:bg-gray-500:disabled{
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 @media not all and (min-width: 640px){
