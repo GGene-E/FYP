@@ -224,7 +224,7 @@ app.get('/logout', (req,res) => {
 app.get('/admin', async (req,res) => {
 
     // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined){
+    if (req.session.userID == undefined || req.session.role.userRole == 'user'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
@@ -429,8 +429,7 @@ app.post('/maxUserMinus', (req,res) => {
 app.get('/dashboard', async (req,res) => {
     
     // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined){
-        console.log("Session has expired, please login again.");
+    if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
         return res.redirect('login');
     }
 
@@ -467,7 +466,7 @@ app.get('/dashboard', async (req,res) => {
 app.get('/new', async (req,res) => {
     
     // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined){
+    if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
