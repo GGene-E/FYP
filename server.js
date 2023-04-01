@@ -272,7 +272,7 @@ app.get('/adminReset', async (req,res) => {
 app.get('/sign-up-admin', async (req,res) => {
 
     // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined){
+    if (req.session.userID == undefined || req.session.role.userRole == 'user'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
