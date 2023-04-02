@@ -34,6 +34,7 @@ app.use(express.urlencoded());
 app.use(express.json());
 //Enable and setup sessions
 app.use(session({
+    name: "confidential",
     secret: "thisismysecret2iihfy37fgeh",
     saveUninitialized: true,
     cookie: {maxAge: dateUtils.oneDay},
