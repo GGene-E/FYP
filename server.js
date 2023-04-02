@@ -632,9 +632,10 @@ app.get('/closeNotifSignAdmin', (req,res) => {
 })
 
 
-
-
-//
+// Catch-all route for unused API routes
+app.use((req, res, next) => {
+    res.status(404).send('404 Error: Page Not Found');
+  });
 
 
 //Listen on port 3000
