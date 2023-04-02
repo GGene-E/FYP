@@ -22,6 +22,7 @@
             <% } %>
                 <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/closeNotif" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
             </div>
@@ -51,6 +52,7 @@
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
                 <form action="/server.js" method="get">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/dashboardOnClick" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Dashboard</a>
                     <button type="submit" formaction="/newOnClick" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">New Reservation</a>
                 </form>
@@ -95,6 +97,7 @@
                                         <form action="/server.js" method="post">
                                             <input name="row" type="hidden" value="<%=i%>">
                                             <input name="col" type="hidden" value="<%=j%>">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                             <button type="submit" formaction="/timeslotForNew" onclick="return confirm('Please Confirm Reservation.')" class="hover:shadow-xl hover:text-gray-500 text-gray-300 font-VarelaRound font-bold text-xs w-full h-full pb-1 mt-1 transition-all">Open</button>
                                         </form>
                                     </td>

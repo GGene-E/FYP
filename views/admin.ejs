@@ -20,6 +20,7 @@
             <% } %>
                 <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/closeNotifAdmin" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
             </div>
@@ -62,6 +63,7 @@
             </div>
             <div class="absolute max-sm:hidden left-10 flex justify-center items-center">
                 <form action="/server.js" method="get">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/logout" class="font-bold font-VarelaRound text-xl hover:text-main">Logout</button>
                 </form>
             </div>
@@ -134,6 +136,7 @@
                         }
                     </script>
                     <div class="w-full flex flex-col">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <input name="search" type="text" placeholder="Search.." class="h-12 bg-gray-200 text-gray-800 p-2 mb-2 w-full placeholder-gray-600 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-500">
                         <div class="flex justify-between mb-2">
                             <button type="submit" formaction="/search" class="rounded-lg bg-indigo-600 hover:bg-indigo-700 hover:shadow-md w-40 py-2 text-gray-100 font-bold mr-1">Search</button>

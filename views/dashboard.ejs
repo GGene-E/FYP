@@ -22,6 +22,7 @@
             <% } %>
                 <form class="flex" action="/server.js" method="get">
                     <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/closeNotifUser" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
                 </form>
             </div>
@@ -51,6 +52,7 @@
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
                 <form action="/server.js" method="get">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/dashboardOnClick" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Dashboard</a>
                     <button type="submit" formaction="/newOnClick" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">New Reservation</a>
                 </form>
@@ -65,6 +67,7 @@
             </div>
             <div class="absolute max-sm:hidden left-10 flex justify-center items-center">
                 <form action="/server.js" method="get">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" formaction="/logout" class="font-bold font-VarelaRound text-xl hover:text-main">Logout</button>
                 </form>
             </div>
@@ -73,12 +76,12 @@
         <!-- Week Display -->
         <div class="flex flex-col h-screen w-screen justify-center items-center pt-10">
             <form class="flex items-center mb-4" action="/server.js" method="get">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" formaction="/prevWeek" class="rounded-lg bg-transparent text-gray-500 hover:text-main text-4xl font-bold font-mono h-8 w-20 items-center mb-4"><</button>
                 
                 <div class=" text-gray-500 font-VarelaRound text-4xl font-extrabold ">
                     <%= week.start %> - <%= week.end %>
                 </div>
-             
                 <button type="submit" formaction="/nextWeek" class="rounded-lg bg-transparent text-gray-500 hover:text-main text-4xl font-bold font-mono h-8 w-20 items-center mb-4">></button>
             </form>
 
@@ -104,6 +107,7 @@
                                         <form action="/server.js" method="post">
                                             <input name="row" type="hidden" value="<%=i%>">
                                             <input name="col" type="hidden" value="<%=j%>">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                             <button type="submit" formaction="/timeslotForDel" onclick="return confirm('Please Confirm Delete Reservation.')" class="hover:shadow-md hover:text-red-600 hover:before:content-['Delete'] font-VarelaRound text-gray-500 text-sm font-bold w-full h-full mt-1 pb-1 transition-all">
                                                 Your Booking
                                             </button>
