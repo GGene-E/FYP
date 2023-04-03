@@ -10,6 +10,7 @@ const session = require('express-session');
 const store = new session.MemoryStore();
 const csurf = require("tiny-csrf");
 const cookieParser = require("cookie-parser");
+const helmet = require('helmet');
 
 
 // Programmer Name      : Mr. Eugene Tye Wee Chin
@@ -48,6 +49,7 @@ app.use(session({
 //Enable anti-forgery tokens 
 app.use(csurf("123456789iamasecret987654321feet"))
 
+app.use(helmet({contentSecurityPolicy: false}))
 
 app.get('/', (req,res) => {
     res.redirect('/login');
