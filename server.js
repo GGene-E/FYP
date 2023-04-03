@@ -43,9 +43,21 @@ app.use(session({
     store: store,
 }));
 
-//Enable helmet module
-app.use(helmet({contentSecurityPolicy: false}))
+// //Enable helmet module
+// app.use(helmet())
 
+//Set Content Security Policy Settings for XSS Mitigation
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        upgradeInsecureRequests: null,
+    },
+}))
+
+
+
+//Redirects users to login by default on accessing the domain
 app.get('/', (req,res) => {
     res.redirect('/login');
 })
