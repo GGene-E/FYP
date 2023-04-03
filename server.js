@@ -49,6 +49,7 @@ app.use(session({
 //Enable anti-forgery tokens 
 app.use(csurf("123456789iamasecret987654321feet"))
 
+//Enable helmet module
 app.use(helmet({contentSecurityPolicy: false}))
 
 app.get('/', (req,res) => {
