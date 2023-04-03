@@ -95,7 +95,7 @@
                                         <form action="/server.js" method="post">
                                             <input name="row" type="hidden" value="<%=i%>">
                                             <input name="col" type="hidden" value="<%=j%>">
-                                            <button type="submit" formaction="/timeslotForNew" onclick="return confirm('Please Confirm Reservation.')" class="hover:shadow-xl hover:text-gray-500 text-gray-300 font-VarelaRound font-bold text-xs w-full h-full pb-1 mt-1 transition-all">Open</button>
+                                            <button type="submit" formaction="/timeslotForNew" class="addBtn hover:shadow-xl hover:text-gray-500 text-gray-300 font-VarelaRound font-bold text-xs w-full h-full pb-1 mt-1 transition-all">Open</button>
                                         </form>
                                     </td>
                                 <% }; %>
@@ -104,7 +104,7 @@
                     <% } %> 
                 </tbody>
             </table>
-            <!-- <button class="rounded-lg bg-green-400 text-white text-sm font-bold h-8 w-36 items-center mt-4">Confirm Booking</button> -->
+            <script src="./utilities/newRes-utils.js"></script>
         </div>
     </body>
 </html>

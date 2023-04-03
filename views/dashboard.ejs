@@ -103,7 +103,7 @@
                                         <form action="/server.js" method="post">
                                             <input name="row" type="hidden" value="<%=i%>">
                                             <input name="col" type="hidden" value="<%=j%>">
-                                            <button type="submit" formaction="/timeslotForDel" onclick="return confirm('Please Confirm Delete Reservation.')" class="hover:shadow-md hover:text-red-600 hover:before:content-['Delete'] font-VarelaRound text-gray-500 text-sm font-bold w-full h-full mt-1 pb-1 transition-all">
+                                            <button type="submit" formaction="/timeslotForDel" class="removeBtn hover:shadow-md hover:text-red-600 hover:before:content-['Delete'] font-VarelaRound text-gray-500 text-sm font-bold w-full h-full mt-1 pb-1 transition-all">
                                                 Your Booking
                                             </button>
                                         </form>
@@ -116,6 +116,7 @@
                     <% } %> 
                 </tbody>
             </table>
+            <script src="./utilities/dashboard-utils.js"></script>
         </div>
     </body>
 </html>
