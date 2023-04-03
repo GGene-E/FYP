@@ -44,7 +44,7 @@ app.use(session({
 }));
 
 // //Enable helmet module
-// app.use(helmet())
+app.use(helmet())
 
 //Set Content Security Policy Settings for XSS Mitigation
 app.use(helmet.contentSecurityPolicy({
