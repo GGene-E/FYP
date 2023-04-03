@@ -8,8 +8,6 @@ const custUtils = require('./helper/customUtils.js');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const store = new session.MemoryStore();
-const csurf = require("tiny-csrf");
-const cookieParser = require("cookie-parser");
 const helmet = require('helmet');
 
 
@@ -35,8 +33,6 @@ app.use(express.static('./public'));
 app.use(express.urlencoded());
 //Enable parsing of JSON
 app.use(express.json());
-//Enable cookie parser
-app.use(cookieParser("secret-cookie-30020"));
 //Enable and setup sessions
 app.use(session({
     name: "confidential",
@@ -46,8 +42,6 @@ app.use(session({
     resave: false,
     store: store,
 }));
-//Enable anti-forgery tokens 
-app.use(csurf("123456789iamasecret987654321feet"))
 
 //Enable helmet module
 app.use(helmet({contentSecurityPolicy: false}))
@@ -61,12 +55,10 @@ app.get('/', (req,res) => {
 //Display login page
 app.get('/login', async (req,res) => {    
     
-    const csrfToken = req.csrfToken();
     res.render('login', {
         show: req.session.notifShow,
         message: req.session.notifMessage,
         color: req.session.notifColor,
-        csrfToken: csrfToken
     });
 })
 
@@ -127,12 +119,10 @@ app.post('/login', async (req,res) => {
 
 // Displays the sign-up page
 app.get('/sign-up', async (req,res) => {
-    const csrfToken = req.csrfToken();
     res.render('signup',{
         show: req.session.notifShow,
         message: req.session.notifMessage,
         color: req.session.notifColor,
-        csrfToken: csrfToken    
     });
 })
 
@@ -239,8 +229,6 @@ app.get('/logout', (req,res) => {
 //Display Admin Page
 app.get('/admin', async (req,res) => {
 
-    const csrfToken = req.csrfToken();
-
     // Check if session expired, if so, redirect to login
     if (req.session.userID == undefined || req.session.role.userRole == 'user'){
         console.log("Session has expired, please login again.");
@@ -268,7 +256,6 @@ app.get('/admin', async (req,res) => {
         maxDel: limiter.maxDel,
         maxUser: limiter.maxUser,
         notif: notif,
-        csrfToken: csrfToken
     })
 })
 
@@ -289,8 +276,6 @@ app.get('/adminReset', async (req,res) => {
 
 // When New Admin button is pressed from admin page, render Admin-registration Page
 app.get('/sign-up-admin', async (req,res) => {
-
-    const csrfToken = req.csrfToken();
 
     // Check if session expired, if so, redirect to login
     if (req.session.userID == undefined || req.session.role.userRole == 'user'){
@@ -314,7 +299,6 @@ app.get('/sign-up-admin', async (req,res) => {
         id: id,
         role: role,
         notif: notif,
-        csrfToken: csrfToken
     });
 })
 
@@ -450,8 +434,6 @@ app.post('/maxUserMinus', (req,res) => {
 //Display Dashboard Page
 app.get('/dashboard', async (req,res) => {
     
-    const csrfToken = req.csrfToken();
-
     // Check if session expired, if so, redirect to login
     if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
         return res.redirect('login');
@@ -483,15 +465,12 @@ app.get('/dashboard', async (req,res) => {
         id: id,
         table: table,
         notif: notif,
-        csrfToken: csrfToken
     });
 })
 
 //Display New Reservations Page
 app.get('/new', async (req,res) => {
     
-    const csrfToken = req.csrfToken();
-
     // Check if session expired, if so, redirect to login
     if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
         console.log("Session has expired, please login again.");
@@ -528,7 +507,6 @@ app.get('/new', async (req,res) => {
         id: id,
         table: table,
         notif: notif,
-        csrfToken: csrfToken
     });
 })
 
