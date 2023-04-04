@@ -282,6 +282,10 @@ app.post('/search', async (req,res) => {
 // When Reset button is pressed, reset table
 app.get('/adminReset', async (req,res) => {
 
+    req.session.notifShow = true; // Notification settings
+    req.session.notifMessage = "Table has been reset.";
+    req.session.notifColor = true;
+
     tableObj.adminTable = await tableObj.createAdminTable();
     res.redirect('/admin')
 })

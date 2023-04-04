@@ -36,6 +36,11 @@ function getSelected() {
     });
 }
 
-deleteBtn.addEventListener('click', () => {
-    return getSelected();
+deleteBtn.addEventListener('click', (event) => {
+    
+    if (!confirm('Are you sure?')) {
+        event.preventDefault();
+    } else {
+        return getSelected();
+    }
 })
