@@ -43,7 +43,7 @@ app.use(session({
     store: store,
 }));
 
-// //Enable helmet module
+//Enable helmet module
 app.use(helmet())
 
 //Set Content Security Policy Settings for XSS Mitigation
@@ -183,8 +183,8 @@ app.post('/sign-up', async (req,res) => {
 // When "Register Admin" button is clicked from Admin-registration page
 app.post('/sign-up-admin', async (req,res) => {
     
-    // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined){
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'administrator'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
@@ -241,8 +241,8 @@ app.get('/logout', (req,res) => {
 //Display Admin Page
 app.get('/admin', async (req,res) => {
 
-    // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined || req.session.role.userRole == 'user'){
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'administrator'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
@@ -289,8 +289,8 @@ app.get('/adminReset', async (req,res) => {
 // When New Admin button is pressed from admin page, render Admin-registration Page
 app.get('/sign-up-admin', async (req,res) => {
 
-    // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined || req.session.role.userRole == 'user'){
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'administrator'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
@@ -446,8 +446,8 @@ app.post('/maxUserMinus', (req,res) => {
 //Display Dashboard Page
 app.get('/dashboard', async (req,res) => {
     
-    // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'user'){
         return res.redirect('login');
     }
 
@@ -483,8 +483,8 @@ app.get('/dashboard', async (req,res) => {
 //Display New Reservations Page
 app.get('/new', async (req,res) => {
     
-    // Check if session expired, if so, redirect to login
-    if (req.session.userID == undefined || req.session.role.userRole == 'administrator'){
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'user'){
         console.log("Session has expired, please login again.");
         return res.redirect('login');
     }
