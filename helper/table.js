@@ -197,6 +197,11 @@ const createAdminTable = async () => {
 	return allResData;
 }
 
+const createUserTable = async() => {
+	let allUsersData = await getData.allUsers();
+	return allUsersData;
+}
+
 const resetTable = () => {
 	let table = [
 		[ false , false, false , false, false],
@@ -267,6 +272,7 @@ const filterSearch = async (resArray, filter) => {
   }
 
 let adminTable = createAdminTable();
+let userTable = createUserTable();
 
-module.exports = {setFullSlot, setUserRes, getDateTime, resetTable, checkMax, formatDateTime, createAdminTable, adminTable ,filterSearch}
+module.exports = {setFullSlot, setUserRes, getDateTime, resetTable, checkMax, formatDateTime, createAdminTable, createUserTable, userTable, adminTable, filterSearch}
 

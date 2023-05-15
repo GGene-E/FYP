@@ -50,7 +50,10 @@
         <!-- Navigation Bar -->
         <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
             <div>
-                <h3 class="font-bold font-VarelaRound text-xl hover:text-main">Welcome to the SOCAT Reservation System</h3>
+                <form action="/server.js" method="get">
+                    <button type="submit" formaction="/admin" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Reservations</button>
+                    <button type="submit" formaction="/userTable" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">Users</button>
+                </form>            
             </div>
             <div class="absolute max-sm:hidden right-10 flex flex-col justify-center items-center">
                 <p class="font-VarelaRound font-bold"><%= id %></p>

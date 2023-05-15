@@ -7,6 +7,60 @@ const dbCred = {
     database: 'socat'
 };
 
+// Gets total hours for user
+const getHrs = async(userID) => {
+    try {
+        const connection = await mysql.createConnection(dbCred);
+
+        const SQL = 'SELECT `soc_hrs` FROM `users` WHERE `userID` = ?;'
+
+        const rows = await connection.execute(SQL,[userID]);
+        await connection.end();
+
+        const row = rows[0][0];
+        return row; 
+
+    } catch(error) {
+        console.error(error)
+    }
+}
+
+// Gets total hours for user
+const saveHrs = async(hours,userID) => {
+    try {
+        const connection = await mysql.createConnection(dbCred);
+
+        const SQL = 'UPDATE `users` SET `soc_hrs` = ? WHERE `userID` = ?;'
+
+        await connection.execute(SQL,[hours, userID]);
+        await connection.end();
+        return true; 
+
+    } catch(error) {
+        console.error(error)
+    }
+}
+
+// Returns all users
+const allUsers = async () => {
+    try {
+        const connection = await mysql.createConnection(dbCred);
+
+        const SQL = `
+            SELECT userID, userName, soc_hrs 
+            FROM Users;`
+
+        const rows = await connection.execute(SQL);
+        await connection.end();
+
+        const row = rows[0];
+        return row; 
+
+    } catch(error) {
+        console.error(error)
+    }
+}
+
 // Returns all reservations
 const allRes = async () => {
     try {
@@ -118,6 +172,21 @@ const deleteRes = async (userID, date, time) => {
     }
 }
 
+// Removes a particular reservation for a user
+const deleteUser = async (userID) => {
+    try {
+        const connection = await mysql.createConnection(dbCred);
+        
+        const SQL = 'DELETE FROM `Users` WHERE `userID` = ?;';
+
+        await connection.execute(SQL, [userID]);
+        return true;
+
+    } catch(error) {
+        console.error(error);
+    }
+}
+
 const logDel = async (userID, date) => {
     try {
         const connection = await mysql.createConnection(dbCred);
@@ -165,25 +234,6 @@ const addUser = async (userID, name, password, role) => {
     }
 }
 
-// // VULNERABLE TO SQL INJECTION!!!
-// // Adds user into database
-// const addUser = async (userID, name, password, role) => {
-//     try {
-//         const connection = await mysql.createConnection(dbCred);
-
-//         const SQL = `
-//             INSERT INTO Users (userID, userName, userPass, userRole)
-//             VALUES ('${userID}', '${name}', '${password}', '${role}');`;
-
-//         await connection.execute(SQL);
-//         return true;
-
-//     } catch(error) {
-//         return false;
-//     }
-// }
-
-
 // Returns a user of a TP ID
 const getUser = async (userID) => {
     try {
@@ -201,7 +251,7 @@ const getUser = async (userID) => {
 }
 
 
-module.exports = {queryRole, fullSlot, userRes, createRes, deleteRes, allRes, logDel, getLogDel, addUser, getUser};
+module.exports = {queryRole, fullSlot, userRes, createRes, deleteRes, allRes, logDel, getLogDel, addUser, getUser, getHrs, saveHrs, allUsers, deleteUser};
 
 
 

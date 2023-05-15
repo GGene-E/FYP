@@ -271,12 +271,53 @@ app.get('/admin', async (req,res) => {
     })
 })
 
+//Display Admin Page
+app.get('/userTable', async (req,res) => {
+
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'administrator'){
+        console.log("Session has expired, please login again.");
+        return res.redirect('login');
+    }
+
+    // Get user info
+    const id = req.session.userID;
+    const role = req.session.role;
+
+    let table = await tableObj.userTable;
+    
+    // Decide whether to show notification
+    const notif = {
+        show: req.session.notifShow,
+        message: req.session.notifMessage,
+        color: req.session.notifColor
+    };
+
+    res.render('users', {
+        id: id,
+        role: role,
+        users: table,
+        maxRes: limiter.maxRes,
+        maxDel: limiter.maxDel,
+        maxUser: limiter.maxUser,
+        notif: notif,
+    })
+})
+
 // When Search button is pressed, filter table
 app.post('/search', async (req,res) => {
 
     tableObj.adminTable = await tableObj.filterSearch(tableObj.adminTable, req.body.search)
  
     res.redirect('/admin')
+})
+
+// When Search button is pressed, filter table
+app.post('/searchUser', async (req,res) => {
+
+    tableObj.userTable = await tableObj.filterSearch(tableObj.userTable, req.body.search)
+ 
+    res.redirect('/userTable')
 })
 
 // When Reset button is pressed, reset table
@@ -288,6 +329,17 @@ app.get('/adminReset', async (req,res) => {
 
     tableObj.adminTable = await tableObj.createAdminTable();
     res.redirect('/admin')
+})
+
+// When Reset button is pressed, reset table
+app.get('/usersReset', async (req,res) => {
+
+    req.session.notifShow = true; // Notification settings
+    req.session.notifMessage = "Table has been reset.";
+    req.session.notifColor = true;
+
+    tableObj.userTable = await tableObj.createUserTable();
+    res.redirect('/userTable')
 })
 
 // When New Admin button is pressed from admin page, render Admin-registration Page
@@ -317,8 +369,6 @@ app.get('/sign-up-admin', async (req,res) => {
         notif: notif,
     });
 })
-
-
 
 // When Delete button is pressed, delete the checked rows
 app.delete('/adminDelete', async (req,res) => {
@@ -350,6 +400,38 @@ app.delete('/adminDelete', async (req,res) => {
     console.log("Successfully Deleted Selected Reservations.");
     
     res.redirect('/admin');
+})
+
+
+// When Delete button is pressed, delete the checked rows
+app.delete('/userDelete', async (req,res) => {
+    // Row is an array of reservation objects
+    const row = req.body.row;
+
+    // If no reservations are selected, return error message
+    if (row.length == 0) {
+        req.session.notifShow = true;
+        req.session.notifMessage = "Please Select Users from Table";
+        req.session.notifColor = false;
+        console.log("Please Select Users from Table.");
+        return res.redirect('/userTable');
+    }
+
+    // For each object in row, delete
+    for (i = 0; i < row.length; i++){
+        await getData.deleteUser(row[i].userID);
+    };
+
+    // Recreate the updated table
+    tableObj.userTable = await tableObj.createUserTable();
+    
+    // Notify user
+    req.session.notifShow = true;
+    req.session.notifMessage = "Successfully Deleted Selected Users";
+    req.session.notifColor = true;
+    console.log("Successfully Deleted Selected Users.");
+    
+    res.redirect('/userTable');
 })
 
 // Increase Maximum Reservations Per User
@@ -593,6 +675,56 @@ app.post('/timeslotForDel', async (req,res) => {
     res.redirect('/dashboard');
 })
 
+//When tracker page is requested
+app.get('/trackerOnClick', async (req,res) => {
+
+    // Check if session expired or unauthorized, redirects back to login if true
+    if (req.session.userID == undefined || req.session.role.userRole != 'user'){
+        console.log("Session has expired, please login again.");
+        return res.redirect('login');
+    }
+
+    // Get user info
+    const id = req.session.userID;
+    const role = req.session.role;
+
+    const currentHours = await getData.getHrs(id);
+
+
+    // Decide whether to show notification
+    const notif = {
+        show: req.session.notifShow,
+        message: req.session.notifMessage,
+        color: req.session.notifColor
+    };
+
+    res.render('tracker', {
+        id: id,
+        role: role,
+        notif: notif,
+        hours: currentHours.soc_hrs
+    })
+
+})
+
+// Receives time from frontend
+app.post('/trackHrs', async (req,res) => {
+    const id = req.session.userID;
+
+    // Convert time to hours
+    const timeInSeconds = req.body.time;
+    const timeInHours = Math.floor(timeInSeconds / 3600);
+    const currentHours = await getData.getHrs(id);
+    // Calculate the hours
+    const newHours = currentHours.soc_hrs + timeInHours;
+    // Save hours 
+    await getData.saveHrs(newHours, id)
+
+    res.status(200);
+})
+
+
+
 // When the previous week is requested
 app.get('/prevWeek', (req,res) => {
     dateUtils.week = dateUtils.getPrevWeek(dateUtils.week);
@@ -632,6 +764,12 @@ app.get('/closeNotif', (req,res) => {
 app.get('/closeNotifAdmin', (req,res) => {
     req.session.notifShow = false;
     res.redirect('/admin');
+})
+
+// To close admin notification for admin
+app.get('/closeNotifAdmin2', (req,res) => {
+    req.session.notifShow = false;
+    res.redirect('/userTable');
 })
 
 // To close login notification

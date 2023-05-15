@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reservations</title>
+        <link rel="stylesheet" href="../style.css">
+    </head>
+
+    <body class="bg-gray-200">
+        
+        <!-- Notifications -->
+        <% if (notif.show) { %>
+        <div class="fixed right-0 bottom-0  w-1/5 flex items-end justify-end m-5">
+            <% if (notif.color) { %>
+            <div class="bg-green-100 p-5 font-VarelaRound border border-green-400">
+            <% } else { %>
+            <div class="bg-red-100 p-5 font-VarelaRound border border-red-400">
+            <% } %>
+                <form class="flex" action="/server.js" method="get">
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound"><%= notif.message %></p>
+                    <button type="submit" formaction="/closeNotifAdmin2" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold ml-3">&#x2715</button>
+                </form>
+            </div>
+        </div>
+        <% } %>
+
+
+        <!-- Instructions Menu -->
+        <div class="fixed left-0 h-screen max-w-sm flex items-center">
+            <div id="instruction" class="bg-white rounded-lg p-5 font-VarelaRound hidden shadow-lg overflow-auto">
+                <div class="flex justify-between">     
+                    <p class="text-lg text-gray-700 font-bold font-VarelaRound">Instructions</p>
+                    <button id="closeInstrButton" type="button" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">&#x2715</button>
+                </div>
+                <p class="my-4 text-gray-700">Table displays all users.</p>
+                <p class="mb-4 text-gray-700">Search bar can be used to filter users.</p>
+                <p class="mb-4 text-gray-700">Reset button resets the table.</p>
+                <p class="text-gray-700">To delete users, select desired rows from table and click Delete button.</p>
+            </div>
+            <div id="showInstrButtonContainer" class="rotate-90 rounded-lg border border-gray-500 p-2 bg-white">
+                <button  id="showInstrButton" type="button" class="text-sm font-VarelaRound text-gray-700 hover:text-main font-bold">Instructions</button>
+            </div>    
+            <script src="./utilities/instructions.js"></script>
+        </div>   
+
+        <!-- Navigation Bar -->
+        <nav class="bg-white fixed top-0 h-24 w-screen font-VarelaRound flex items-center justify-center">
+            <div>
+                <form action="/server.js" method="get">
+                    <button type="submit" formaction="/admin" class="font-bold font-VarelaRound text-xl hover:text-main mr-10">Reservations</button>
+                    <button type="submit" formaction="/userTable" class="font-bold font-VarelaRound text-xl hover:text-main ml-10">Users</button>
+                </form>            
+            </div>
+            <div class="absolute max-sm:hidden right-10 flex flex-col justify-center items-center">
+                <p class="font-VarelaRound font-bold"><%= id %></p>
+                <% if (role.userRole == 'administrator') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Administrator</p>
+                <% } else if (role.userRole == 'user') { %>
+                    <p class="font-VarelaRound font-bold text-gray-500 text-xs">Student</p>
+                <% } %>
+            </div>
+            <div class="absolute max-sm:hidden left-10 flex justify-center items-center">
+                <form action="/server.js" method="get">
+                    <button type="submit" formaction="/logout" class="font-bold font-VarelaRound text-xl hover:text-main">Logout</button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="w-screen h-screen flex justify-center items-center">
+            <!-- Table -->
+            <div id="table" class="overflow-y-scroll max-h-96 mt-16 shadow-md">
+                <table class=" border-collapse bg-white ">
+                    <thead class="text-center items-center" >
+                        <tr>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">User ID</th>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">User Name</th>
+                            <th class="px-2 border-b-2 w-36 border-gray-600 text-gray-700 font-VarelaRound text-lg ">SOC Hours</th>
+                            <th class="px-2 border-b-2 w-8 border-gray-600"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach((users) => { %>
+                        <tr>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= users.userID %></td>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= users.userName %></td>
+                            <td class="text-gray-700 text-center border-b border-gray-400" ><%= users.soc_hrs %></td>
+                            <td class="border-b border-gray-400"><input name="row" type="checkbox"></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class=" mt-16 ml-32 bg-white rounded-2xl p-5 shadow-lg">
+                <form action="/server.js" method="post">
+                    <div class="w-full flex flex-col">
+                        <input name="search" type="text" placeholder="Search.." class="h-12 bg-gray-200 text-gray-800 p-2 mb-2 w-full placeholder-gray-600 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-500">
+                        <div class="flex justify-between mb-2">
+                            <button type="submit" formaction="/searchUser" class="rounded-lg bg-indigo-600 hover:bg-indigo-700 hover:shadow-md w-40 py-2 text-gray-100 font-bold mr-1">Search</button>
+                            <button type="submit" formmethod="get" formaction="/usersReset" class="bg-blue-500 rounded-lg hover:bg-blue-600 hover:shadow-md text-gray-100 font-bold ml-1 w-40 py-2">Reset</button>
+                        </div>
+                        <button type="button" id="deleteBtn" class="bg-red-500 rounded-lg hover:bg-red-600 hover:shadow-md text-gray-100 font-bold py-2 mr-1">Delete</button>
+                        <script src="./utilities/admin-utils-2.js"></script>
+                    </div>
+                </form>
+            </div>            
+
+
+
+        </div>
+    </body>
+</html> 
